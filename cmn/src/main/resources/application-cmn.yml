@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: cmn
+
+  datasource:
+    cmn:
+      #      jndi-name: java:comp/env/jdbc/cmnDS
+      url: jdbc:mariadb://localhost:3306/cmnDB
+      username: root
+      password: test
+      driver-class-name: org.mariadb.jdbc.Driver
+
+mybatis:
+  config-location: classpath:mybatis/config/cmn-mybatis-config.xml
+  mapper-locations: classpath*:mybatis/mapper/cmn/**/*.xml
+  type-aliases-package: fps.cmn.db.entity
+
+

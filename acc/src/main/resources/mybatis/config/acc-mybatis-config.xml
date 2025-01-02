@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+    <settings>
+        <!-- mapUnderscoreToCamelCase: 스네이크 케이스(created_at)를 카멜 케이스(createdAt)로 자동 변환합니다. -->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+        <!-- 쿼리 로그를 표준 출력으로 설정합니다. -->
+        <setting name="logImpl" value="STDOUT_LOGGING"/>
+    </settings>
+
+    <typeAliases>
+        <!-- fps.cmn.db.entity 내 모든 클래스에 대한 별칭을 자동으로 생성합니다. -->
+        <package name="fps.acc.db.entity"/>
+    </typeAliases>
+
+    <mappers>
+        <!-- fps.cmn.db.mapper 내 모든 매퍼 인터페이스를 자동으로 매핑합니다. -->
+        <package name="fps.acc.db.mapper"/>
+    </mappers>
+</configuration>

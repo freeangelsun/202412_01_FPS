@@ -1,16 +1,15 @@
 plugins {
-	id 'org.springframework.boot' version '3.4.0'
-	id 'io.spring.dependency-management' version '1.1.6'
+	id 'org.springframework.boot' version '3.4.1'
+	id 'io.spring.dependency-management' version '1.1.7'
 	id 'java'
 }
 
 group = 'fps.acc'
 version = '0.0.1-fps.acc-SNAPSHOT'
 
-
-configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(17)
 	}
 }
 
@@ -19,11 +18,27 @@ repositories {
 }
 
 dependencies {
+	// ✅ 공통 모듈 (CMN) 사용
 	implementation project(':cmn')
+
+	// ✅ Spring Boot Starter Web (웹 애플리케이션 실행)
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+
+	// ✅ MariaDB 드라이버 (ACC 전용 데이터 소스)
+	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+
+	// ✅ Lombok (컴파일 시 의존성)
+	compileOnly 'org.projectlombok:lombok:1.18.32'
+	annotationProcessor 'org.projectlombok:lombok:1.18.32'
+
+	// ✅ 테스트 의존성 (JUnit5)
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testAnnotationProcessor 'org.projectlombok:lombok:1.18.32'
+
 }
 
+
+// ✅ 테스트 설정 (JUnit5)
 tasks.named('test') {
 	useJUnitPlatform()
 }

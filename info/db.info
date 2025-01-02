@@ -1,0 +1,37 @@
+CREATE DATABASE cmnDB;
+
+USE cmnDB;
+CREATE TABLE cmn_member (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+INSERT INTO cmn_member (name, description)
+VALUES
+('cmn 1', 'This is a test description 1'),
+('cmn 2', 'This is a test description 2'),
+('cmn 3', 'This is a test description 3');
+
+commit;
+
+------------------------------------------------------------------------------------------------------
+CREATE DATABASE accDB;
+USE accDB;
+CREATE TABLE acc_member (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+INSERT INTO acc_member (name, description)
+VALUES
+('acc 1', 'This is a test description 1'),
+('acc 2', 'This is a test description 2'),
+('acc 3', 'This is a test description 3');
+
+commit;

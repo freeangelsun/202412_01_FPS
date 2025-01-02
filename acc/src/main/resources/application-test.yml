@@ -1,0 +1,26 @@
+spring:
+  datasource:
+    acc:
+#     jndi-name: java:comp/env/jdbc/accDS
+      url: jdbc:mariadb://localhost:3306/accDB
+      username: root
+      password: test
+      driver-class-name: org.mariadb.jdbc.Driver
+
+mybatis:
+  config-location: classpath:mybatis/config/acc-mybatis-config.xml
+  mapper-locations: classpath:mybatis/mapper/acc/**/*.xml
+  type-aliases-package: fps.acc.db.model
+
+
+server:
+  port: 8080
+
+# 로그 설정
+logging:
+  config: classpath:log/logback-test.xml
+  # 로그 레벨 설정
+  level:
+    root: INFO # 전체 애플리케이션의 기본 로그 레벨
+    fps.cmn: INFO  # CMN 전용 로그 레벨 (ACC에서 제어)
+    fps.acc: INFO  # ACC 모듈에 대한 디버깅 로그 레벨
