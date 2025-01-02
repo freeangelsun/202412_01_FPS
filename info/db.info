@@ -15,6 +15,45 @@ VALUES
 ('cmn 2', 'This is a test description 2'),
 ('cmn 3', 'This is a test description 3');
 
+
+CREATE TABLE code_table (
+    code_id INT PRIMARY KEY AUTO_INCREMENT,       -- 고유 ID
+    parent_id INT NULL,                           -- 상위 코드 ID (NULL이면 최상위 코드)
+    code_key VARCHAR(50) NOT NULL,                -- 코드 키
+    code_value VARCHAR(50) NOT NULL,              -- 코드 값
+    description VARCHAR(255) NULL,               -- 코드 설명
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (parent_id) REFERENCES code_table(code_id) ON DELETE SET NULL
+);
+
+-- 최상위 코드
+INSERT INTO code_table (parent_id, code_key, code_value, description)
+VALUES (NULL, 'USER', '사용자 코드', '사용자 관련 코드');
+
+-- 하위 코드
+INSERT INTO code_table (parent_id, code_key, code_value, description)
+VALUES (1, 'USER_ROLE', 'ADMIN', '사용자 역할 코드');
+
+INSERT INTO code_table (parent_id, code_key, code_value, description)
+VALUES (1, 'USER_STATUS', 'ACTIVE', '사용자 상태 코드');
+
+INSERT INTO code_table (parent_id, code_key, code_value, description)
+VALUES (1, 'USER_STATUS', 'INACTIVE', '비활성 상태 코드');
+
+
+CREATE TABLE message_table (
+    message_id INT PRIMARY KEY AUTO_INCREMENT,    -- 고유 ID
+    message_key VARCHAR(50) NOT NULL,             -- 메시지 키
+    message_value VARCHAR(255) NOT NULL,          -- 메시지 내용
+    locale VARCHAR(10) NOT NULL,                  -- 언어 설정 (예: en, ko)
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+INSERT INTO message_table (message_key, message_value, locale)
+VALUES ('WELCOME_MSG', 'Welcome to the system!', 'en');
+INSERT INTO message_table (message_key, message_value, locale)
+VALUES ('WELCOME_MSG', '시스템에 오신 것을 환영합니다!', 'ko');
+
 commit;
 
 ------------------------------------------------------------------------------------------------------

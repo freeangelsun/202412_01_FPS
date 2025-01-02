@@ -34,6 +34,11 @@ dependencies {
 	// MariaDB 드라이버
 	api 'org.mariadb.jdbc:mariadb-java-client:3.3.1'
 
+	// Spring Cache 의존성 (캐싱 기능 활성화)
+	api 'org.springframework.boot:spring-boot-starter-cache:3.4.1'
+	// Caffeine 캐시 의존성 (로컬 캐시 솔루션)
+	api 'com.github.ben-manes.caffeine:caffeine:3.1.8'
+
 	// 테스트 의존성
 	testImplementation 'org.springframework.boot:spring-boot-starter-test:3.4.1'
 	testAnnotationProcessor 'org.projectlombok:lombok:1.18.32'

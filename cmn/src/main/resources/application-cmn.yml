@@ -1,6 +1,8 @@
 spring:
   application:
     name: cmn
+  cache:
+    type: caffeine
 
   datasource:
     cmn:
