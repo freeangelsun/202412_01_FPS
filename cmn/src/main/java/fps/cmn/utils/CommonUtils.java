@@ -1,4 +1,4 @@
-package fps.cmn.util;
+package fps.cmn.utils;
 
 public class CommonUtils {
     public static String sayHello() {

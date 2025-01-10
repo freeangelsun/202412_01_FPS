@@ -16,6 +16,12 @@ repositories {
 	mavenCentral() // Maven 중앙 저장소 사용
 }
 
+dependencyManagement {
+	imports {
+		mavenBom 'org.springframework.boot:spring-boot-dependencies:3.4.1'
+	}
+}
+
 dependencies {
 	// ✅ Lombok 설정 (컴파일 시 어노테이션 처리)
 	api 'org.projectlombok:lombok:1.18.32'
@@ -24,21 +30,28 @@ dependencies {
 	// ✅ MyBatis 설정 (공통 데이터 접근)
 	api 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.4'
 
+	// ✅ JPA 및 Hibernate 설정 (미래 확장성 지원)
+	// api 'org.springframework.boot:spring-boot-starter-data-jpa'
+
 	// ✅ MariaDB 드라이버 (공통 데이터베이스 지원)
 	api 'org.mariadb.jdbc:mariadb-java-client:3.3.1'
 
 	// ✅ 캐싱 설정 (Spring Cache + Caffeine)
-	api 'org.springframework.boot:spring-boot-starter-cache:3.4.1'
+	api 'org.springframework.boot:spring-boot-starter-cache'
 	api 'com.github.ben-manes.caffeine:caffeine:3.1.8'
 
-	// ✅ AOP 및 AspectJ 설정 (공통 트랜잭션 로깅 등)
-	api 'org.springframework.boot:spring-boot-starter-aop:3.4.1'
+	// ✅ AOP 및 AspectJ 설정 (공통 로깅 및 트랜잭션 관리)
+	api 'org.springframework.boot:spring-boot-starter-aop'
 	api 'org.aspectj:aspectjrt:1.9.20'
 	api 'org.aspectj:aspectjweaver:1.9.20'
 
+	// ✅ Bean Validation 설정 (DTO 검증)
+	api 'jakarta.validation:jakarta.validation-api:3.0.2'
+	api 'org.hibernate.validator:hibernate-validator:8.0.0.Final'
+	api 'org.springframework.boot:spring-boot-starter-validation'
+
 	// ✅ 테스트 의존성
-	testImplementation 'org.springframework.boot:spring-boot-starter-test:3.4.1'
-	testAnnotationProcessor 'org.projectlombok:lombok:1.18.32'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 tasks.named('test') {
@@ -46,5 +59,5 @@ tasks.named('test') {
 }
 
 tasks.withType(Test) {
-	enabled = false // 테스트 실행 비활성화 (필요 시 true로 설정)
+	enabled = false // 현재 테스트 코드 작성 전이므로 비활성화. 활성화 필요 시 true로 변경
 }

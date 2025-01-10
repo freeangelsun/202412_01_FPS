@@ -1,6 +1,8 @@
 package fps.acc.common.exception;
 
 import fps.cmn.common.logging.TransactionLogEvent;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
@@ -14,6 +16,7 @@ import org.springframework.web.context.request.WebRequest;
 import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * 글로벌 예외 처리 핸들러 클래스.
@@ -43,30 +46,42 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public ResponseEntity<String> handleMissingParams(MissingServletRequestParameterException ex, WebRequest request) {
-        String missingParam = Optional.ofNullable(ex.getParameterName()).orElse("Unknown Parameter");
-        String menuId = "default-menu";
-        String requestUri = Optional.ofNullable(request.getDescription(false)).orElse("Unknown URI");
-        String execUser = "Unknown User"; // 기본 사용자 정보
+        return processExceptionAndLog(ex, request, HttpStatus.BAD_REQUEST, "FAILURE");
+    }
 
-        logger.error("Missing required parameter: {}, Request Details: {}", missingParam, requestUri);
+    /**
+     * ConstraintViolationException 처리.
+     *
+     * @param ex      유효성 검증 실패 예외
+     * @param request HTTP 요청 객체
+     * @return 클라이언트에 반환할 HTTP 응답
+     */
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<String> handleValidationException(ConstraintViolationException ex, WebRequest request) {
+        String errorDetails = ex.getConstraintViolations().stream()
+                .map(this::formatConstraintViolation)
+                .collect(Collectors.joining(", "));
 
-        // 트랜잭션 로그 발행
-        publishTransactionLog(
-                UUID.randomUUID().toString(),
-                "FAILURE",
-                "ACC",
-                menuId,
-                requestUri,
-                null, // 요청 파라미터 없음
-                null, // 응답 데이터 없음
-                HttpStatus.BAD_REQUEST.value(),
-                "Missing parameter: " + missingParam,
-                execUser,
-                Instant.now().toEpochMilli(),
-                Instant.now().toEpochMilli()
+        logger.error("Validation failed: {}, Request Details: {}", errorDetails, getRequestUri(request));
+
+        return processExceptionAndLog(
+                new Exception("Validation failed: " + errorDetails),
+                request,
+                HttpStatus.BAD_REQUEST,
+                "FAILURE"
         );
+    }
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Missing required parameter: " + missingParam);
+    /**
+     * IllegalArgumentException 처리.
+     *
+     * @param ex      IllegalArgumentException 예외
+     * @param request HTTP 요청 객체
+     * @return 클라이언트에 반환할 HTTP 응답
+     */
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException ex, WebRequest request) {
+        return processExceptionAndLog(ex, request, HttpStatus.BAD_REQUEST, "FAILURE");
     }
 
     /**
@@ -78,29 +93,40 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleGeneralException(Exception ex, WebRequest request) {
-        String menuId = "default-menu";
-        String requestUri = Optional.ofNullable(request.getDescription(false)).orElse("Unknown URI");
-        String execUser = "Unknown User"; // 기본 사용자 정보
+        return processExceptionAndLog(ex, request, HttpStatus.INTERNAL_SERVER_ERROR, "FAILURE");
+    }
 
-        logger.error("An error occurred: {}, Request Details: {}", ex.getMessage(), requestUri, ex);
+    /**
+     * 오류 메시지를 포맷하고 트랜잭션 로그를 기록합니다.
+     *
+     * @param ex      예외 객체
+     * @param request HTTP 요청 객체
+     * @param status  HTTP 상태 코드
+     * @param logType 로그 유형
+     * @return 클라이언트에 반환할 HTTP 응답
+     */
+    private ResponseEntity<String> processExceptionAndLog(Exception ex, WebRequest request, HttpStatus status, String logType) {
+        String requestUri = getRequestUri(request);
+        String execUser = "Unknown User";
 
-        // 트랜잭션 로그 발행
+        logger.error("Error occurred: {}, Request Details: {}", ex.getMessage(), requestUri);
+
         publishTransactionLog(
                 UUID.randomUUID().toString(),
-                "FAILURE",
+                logType,
                 "ACC",
-                menuId,
+                "default-menu",
                 requestUri,
                 null, // 요청 파라미터 없음
                 null, // 응답 데이터 없음
-                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                status.value(),
                 ex.getMessage(),
                 execUser,
                 Instant.now().toEpochMilli(),
                 Instant.now().toEpochMilli()
         );
 
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred.");
+        return ResponseEntity.status(status).body("Error: " + ex.getMessage());
     }
 
     /**
@@ -139,5 +165,25 @@ public class GlobalExceptionHandler {
                 endTime
         );
         eventPublisher.publishEvent(event);
+    }
+
+    /**
+     * ConstraintViolation 정보를 포맷팅합니다.
+     *
+     * @param violation 유효성 검증 실패 정보
+     * @return 포맷된 오류 메시지
+     */
+    private String formatConstraintViolation(ConstraintViolation<?> violation) {
+        return violation.getPropertyPath() + ": " + violation.getMessage();
+    }
+
+    /**
+     * 요청 URI를 반환합니다.
+     *
+     * @param request WebRequest 객체
+     * @return 요청 URI
+     */
+    private String getRequestUri(WebRequest request) {
+        return Optional.ofNullable(request.getDescription(false)).orElse("Unknown URI");
     }
 }
