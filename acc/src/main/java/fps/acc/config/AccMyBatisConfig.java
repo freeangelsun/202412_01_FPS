@@ -17,7 +17,7 @@ import javax.sql.DataSource;
  */
 @Configuration
 @MapperScan(
-        basePackages = "fps.acc.db.mapper",
+        basePackages = "fps.acc.mapper",
         sqlSessionFactoryRef = "accSqlSessionFactory"
 )
 public class AccMyBatisConfig {

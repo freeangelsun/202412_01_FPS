@@ -1,6 +1,6 @@
 plugins {
-	id 'java-library' // 라이브러리 모듈로 사용
-	id 'io.spring.dependency-management' version '1.1.7'
+	id 'java-library' // 공통 라이브러리 모듈로 사용
+	id 'io.spring.dependency-management' version '1.1.7' // Spring 의존성 관리
 }
 
 group = 'fps.cmn'
@@ -8,56 +8,43 @@ version = '0.0.1-fps.cmn-SNAPSHOT'
 
 java {
 	toolchain {
-		languageVersion = JavaLanguageVersion.of(17)
+		languageVersion = JavaLanguageVersion.of(17) // Java 17 사용
 	}
 }
 
 repositories {
-	mavenCentral()
+	mavenCentral() // Maven 중앙 저장소 사용
 }
 
-configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
-}
-
-// ✅ 공통 의존성 설정
 dependencies {
-	// Lombok (하위 모듈에서도 사용 가능)
+	// ✅ Lombok 설정 (컴파일 시 어노테이션 처리)
 	api 'org.projectlombok:lombok:1.18.32'
 	annotationProcessor 'org.projectlombok:lombok:1.18.32'
 
-	// MyBatis 설정 (하위 모듈에서 사용 가능)
+	// ✅ MyBatis 설정 (공통 데이터 접근)
 	api 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.4'
 
-	// MariaDB 드라이버
+	// ✅ MariaDB 드라이버 (공통 데이터베이스 지원)
 	api 'org.mariadb.jdbc:mariadb-java-client:3.3.1'
 
-	// Spring Cache 의존성 (캐싱 기능 활성화)
+	// ✅ 캐싱 설정 (Spring Cache + Caffeine)
 	api 'org.springframework.boot:spring-boot-starter-cache:3.4.1'
-	// Caffeine 캐시 의존성 (로컬 캐시 솔루션)
 	api 'com.github.ben-manes.caffeine:caffeine:3.1.8'
 
-	// 테스트 의존성
+	// ✅ AOP 및 AspectJ 설정 (공통 트랜잭션 로깅 등)
+	api 'org.springframework.boot:spring-boot-starter-aop:3.4.1'
+	api 'org.aspectj:aspectjrt:1.9.20'
+	api 'org.aspectj:aspectjweaver:1.9.20'
+
+	// ✅ 테스트 의존성
 	testImplementation 'org.springframework.boot:spring-boot-starter-test:3.4.1'
 	testAnnotationProcessor 'org.projectlombok:lombok:1.18.32'
 }
 
-// ✅ JUnit5로 테스트 설정
 tasks.named('test') {
-	useJUnitPlatform()
+	useJUnitPlatform() // JUnit5 테스트 사용
 }
 
-// ✅ 빌드 시 테스트 실행 제외 (필요 시 활성화)
 tasks.withType(Test) {
-	enabled = false
+	enabled = false // 테스트 실행 비활성화 (필요 시 true로 설정)
 }
-
-
-
-// ✅ Tomcat 관련 의존성 제거 (서브모듈 설정 사용)
-//configurations {
-//	implementation.exclude group: 'org.apache.tomcat.embed', module: 'tomcat-embed-core'
-//	implementation.exclude group: 'org.apache.tomcat.embed', module: 'tomcat-embed-jasper'
-//}

@@ -1,6 +1,6 @@
 package fps.acc.service.member;
 
-import fps.cmn.db.entity.member.Member;
+import fps.cmn.entity.member.Member;
 import fps.cmn.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

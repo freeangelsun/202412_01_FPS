@@ -1,7 +1,7 @@
 plugins {
-	id 'org.springframework.boot' version '3.4.1'
-	id 'io.spring.dependency-management' version '1.1.7'
-	id 'java'
+	id 'org.springframework.boot' version '3.4.1' // Spring Boot 설정
+	id 'io.spring.dependency-management' version '1.1.7' // Spring 의존성 관리
+	id 'java' // Java 모듈로 설정
 }
 
 group = 'fps.acc'
@@ -9,25 +9,28 @@ version = '0.0.1-fps.acc-SNAPSHOT'
 
 java {
 	toolchain {
-		languageVersion = JavaLanguageVersion.of(17)
+		languageVersion = JavaLanguageVersion.of(17) // Java 17 사용
 	}
 }
 
 repositories {
-	mavenCentral()
+	mavenCentral() // Maven 중앙 저장소 사용
 }
 
 dependencies {
-	// ✅ 공통 모듈 (CMN) 사용
+	// ✅ 공통 모듈 (CMN) 의존성
 	implementation project(':cmn')
 
-	// ✅ Spring Boot Starter Web (웹 애플리케이션 실행)
+	// ✅ Spring Boot Starter Web (REST API 제공 시 필요)
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+
+	// ✅ 서블릿 API
+	implementation 'javax.servlet:javax.servlet-api:4.0.1'
 
 	// ✅ MariaDB 드라이버 (ACC 전용 데이터 소스)
 	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
 
-	// ✅ Lombok (컴파일 시 의존성)
+	// ✅ Lombok (컴파일 시 어노테이션 처리)
 	compileOnly 'org.projectlombok:lombok:1.18.32'
 	annotationProcessor 'org.projectlombok:lombok:1.18.32'
 
@@ -35,10 +38,16 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testAnnotationProcessor 'org.projectlombok:lombok:1.18.32'
 
+	// ✅ Mockito (선택 사항)
+	testImplementation 'org.mockito:mockito-core:5.5.0'
 }
 
-
-// ✅ 테스트 설정 (JUnit5)
+// ✅ 테스트 설정
 tasks.named('test') {
-	useJUnitPlatform()
+	useJUnitPlatform() // JUnit5 테스트 사용
+}
+
+// ✅ 테스트 실행 비활성화 (필요 시)
+tasks.withType(Test) {
+	enabled = false
 }

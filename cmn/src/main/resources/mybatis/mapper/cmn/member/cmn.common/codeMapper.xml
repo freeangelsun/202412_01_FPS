@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="fps.cmn.db.mapper.common.CodeMapper">
+<mapper namespace="fps.cmn.mapper.common.CodeMapper">
 
     <!-- 모든 코드 조회 -->
     <select id="findAllCodes" resultType="map">

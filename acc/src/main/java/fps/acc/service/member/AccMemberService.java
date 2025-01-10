@@ -1,7 +1,7 @@
 package fps.acc.service.member;
 
-import fps.acc.db.entity.member.AccMember;
-import fps.acc.db.mapper.member.AccMemberMapper;
+import fps.acc.entity.member.AccMember;
+import fps.acc.mapper.member.AccMemberMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

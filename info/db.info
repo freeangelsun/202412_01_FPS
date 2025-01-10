@@ -54,6 +54,36 @@ VALUES ('WELCOME_MSG', 'Welcome to the system!', 'en');
 INSERT INTO message_table (message_key, message_value, locale)
 VALUES ('WELCOME_MSG', '시스템에 오신 것을 환영합니다!', 'ko');
 
+
+
+CREATE TABLE TRAN_LOG (
+    LOG_DATE DATE NOT NULL, -- 로그 기준일자
+    LOG_IDX BIGINT AUTO_INCREMENT PRIMARY KEY, -- 로그 인덱스
+    LOG_TYPE VARCHAR(20) NOT NULL, -- 로그 구분 (e.g., INFO, ERROR)
+    TRANSACTION_ID VARCHAR(50) NOT NULL, -- 트랜잭션 ID
+    MODULE_ID VARCHAR(20) NOT NULL, -- 모듈 ID (ACC, MBR 등)
+    MENU_ID VARCHAR(50), -- 거래(메뉴) ID
+    URI VARCHAR(255) NOT NULL, -- 요청 URI
+    PARAMETERS TEXT, -- 요청 파라미터
+    RESPONSE TEXT, -- 리턴값
+    RESPONSE_CODE INT, -- 응답 코드
+    ERROR_MESSAGE TEXT, -- 오류 정보
+    EXEC_USER VARCHAR(50), -- 거래 수행 유저
+    START_TIME TIMESTAMP NOT NULL, -- 최초 수행 일시
+    END_TIME TIMESTAMP, -- 거래 종료 일시
+    CREATED_AT TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 생성 시각
+    INDEX IDX_TRAN_LOG_DATE (LOG_DATE) -- 인덱스 정의
+) ENGINE=InnoDB;
+
+CREATE TABLE TRAN_LOG_DTL (
+    DETAIL_ID BIGINT AUTO_INCREMENT PRIMARY KEY, -- 상세 로그 ID
+    LOG_IDX BIGINT NOT NULL, -- 참조 로그 인덱스
+    DETAIL_KEY VARCHAR(50) NOT NULL, -- 상세 키 (e.g., 쿼리 실행 단계)
+    DETAIL_VALUE TEXT NOT NULL, -- 상세 값
+    CREATED_AT TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 생성 시각
+    FOREIGN KEY (LOG_IDX) REFERENCES TRAN_LOG(LOG_IDX) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
 commit;
 
 ------------------------------------------------------------------------------------------------------

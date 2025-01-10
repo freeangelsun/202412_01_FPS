@@ -1,7 +1,7 @@
 package fps.cmn.service.member;
 
-import fps.cmn.db.entity.member.Member;
-import fps.cmn.db.mapper.member.MemberMapper;
+import fps.cmn.entity.member.Member;
+import fps.cmn.mapper.member.MemberMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -1,6 +1,6 @@
-package fps.cmn.service.common;
+package fps.cmn.service.common.cache;
 
-import fps.cmn.db.mapper.common.CodeMapper;
+import fps.cmn.mapper.common.CodeMapper;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.scheduling.annotation.Scheduled;

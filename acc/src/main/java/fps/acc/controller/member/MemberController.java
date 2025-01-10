@@ -1,9 +1,9 @@
 package fps.acc.controller.member;
 
-import fps.acc.db.entity.member.AccMember;
+import fps.acc.entity.member.AccMember;
 import fps.acc.service.member.AccMemberService;
 import fps.acc.service.member.CmnMemberProxyService;
-import fps.cmn.db.entity.member.Member;
+import fps.cmn.entity.member.Member;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

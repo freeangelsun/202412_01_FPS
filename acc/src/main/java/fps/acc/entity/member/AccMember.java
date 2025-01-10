@@ -1,4 +1,4 @@
-package fps.acc.db.entity.member;
+package fps.acc.entity.member;
 
 import lombok.Getter;
 import lombok.Setter;

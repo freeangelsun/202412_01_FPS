@@ -1,4 +1,4 @@
-package fps.cmn.db.entity.member;
+package fps.cmn.entity.member;
 
 import lombok.Data;
 import java.sql.Timestamp;

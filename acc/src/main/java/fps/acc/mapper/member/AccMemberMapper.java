@@ -1,6 +1,6 @@
-package fps.acc.db.mapper.member;
+package fps.acc.mapper.member;
 
-import fps.acc.db.entity.member.AccMember;
+import fps.acc.entity.member.AccMember;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

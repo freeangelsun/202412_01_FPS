@@ -1,4 +1,4 @@
-package fps.cmn.db.mapper.common;
+package fps.cmn.mapper.common;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;

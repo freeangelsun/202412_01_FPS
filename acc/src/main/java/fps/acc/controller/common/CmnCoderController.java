@@ -1,6 +1,6 @@
 package fps.acc.controller.common;
 
-import fps.cmn.service.common.CodeCacheService;
+import fps.cmn.service.common.cache.CodeCacheService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

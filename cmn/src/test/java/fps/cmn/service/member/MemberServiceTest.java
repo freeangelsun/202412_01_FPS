@@ -1,6 +1,6 @@
 package fps.cmn.service.member;
 
-import fps.cmn.db.entity.member.Member;
+import fps.cmn.entity.member.Member;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
